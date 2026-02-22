@@ -10,16 +10,16 @@ readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.9"
 dependencies = [
-    "torch",
-    "torchaudio",
-    "transformers",
-    "numpy",
-    "cn2an",
-    "kaldiio",
-    "kaldi_native_fbank",
-    "sentencepiece",
-    "soundfile",
-    "textgrid",
+    "torch>=2.0",
+    "torchaudio>=2.0",
+    "transformers>=4.30",
+    "numpy>=1.21",
+    "cn2an>=0.5.0",
+    "kaldiio>=2.18.0",
+    "kaldi_native_fbank>=1.0",
+    "sentencepiece>=0.2.0",
+    "soundfile>=0.12.0",
+    "textgrid>=1.5",
 ]
 
 [project.scripts]
