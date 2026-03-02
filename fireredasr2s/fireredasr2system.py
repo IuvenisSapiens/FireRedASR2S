@@ -176,6 +176,8 @@ class FireRedAsr2System:
 
         vad_segments_ms = [(int(s*1000), int(e*1000)) for s, e in vad_result["timestamps"]]
         text = "".join(s["text"] for s in sentences)
+        # Add space after English punctuation when followed by a letter
+        text = re.sub(r'([.,!?])\s*([a-zA-Z])', r'\1 \2', text)
 
         result = {
             "uttid": uttid,

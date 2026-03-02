@@ -85,7 +85,15 @@ class FireRedPunc:
 
         new_punc_txts = []
         for txts in punc_txts:
-            new_txts = [(RuleBaedTxtFix.fix(txt[0]), txt[1], txt[2]) for txt in txts]
+            new_txts = []
+            for idx, txt in enumerate(txts):
+                # Only capitalize first letter after sentence-ending punctuation (.!?), not after comma
+                if idx == 0:
+                    cap = True
+                else:
+                    prev_text = new_txts[idx - 1][0]
+                    cap = bool(prev_text) and prev_text[-1] in '.!?。？！'
+                new_txts.append((RuleBaedTxtFix.fix(txt[0], capitalize_first=cap), txt[1], txt[2]))
             new_punc_txts.append(new_txts)
         punc_txts = new_punc_txts
 
@@ -321,7 +329,7 @@ class ModelIO:
 
 class RuleBaedTxtFix:
     @classmethod
-    def fix(cls, txt_ori):
+    def fix(cls, txt_ori, capitalize_first=True):
         txt = txt_ori.lower()
         # English Punc
         txt = re.sub(r"([a-z])，([a-z])", r"\1, \2", txt)
@@ -348,7 +356,7 @@ class RuleBaedTxtFix:
         txt = re.sub(" i've ", " I've ", txt)
         txt = re.sub(" i'll ", " I'll ", txt)
         # First English upper
-        if len(txt) > 0 and re.match("[a-z]", txt[0]):
+        if capitalize_first and len(txt) > 0 and re.match("[a-z]", txt[0]):
             txt = txt[0].upper() + txt[1:]
         txt = re.sub(r'([.!?。？！])\s+([a-z])', lambda m: f"{m.group(1)} {m.group(2).upper()}", txt)
 
