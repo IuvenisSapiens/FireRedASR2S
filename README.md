@@ -23,6 +23,7 @@ FireRedASR2S is a state-of-the-art (SOTA), industrial-grade, all-in-one ASR syst
 
 
 ## 🔥 News
+- [2026.03.05] 🚀 [vLLM](https://github.com/vllm-project/vllm/pull/35727) supports FireRedASR2-LLM. See [vLLM Usage](https://github.com/FireRedTeam/FireRedASR2S?tab=readme-ov-file#vllm-usage) part.
 - [2026.02.25] 🔥 We release **FireRedASR2-LLM model weights**. [🤗](https://huggingface.co/FireRedTeam/FireRedASR2-LLM) [🤖](https://www.modelscope.cn/models/xukaituo/FireRedASR2-LLM/)
 - [2026.02.13] 🚀 Support TensorRT-LLM inference acceleration for FireRedASR2-AED (contributed by NVIDIA). Benchmark on AISHELL-1 test set shows **12.7x speedup** over PyTorch baseline (single H20).
 - [2026.02.12] 🔥 We release FireRedASR2S (FireRedASR2-AED, FireRedVAD, FireRedLID, and FireRedPunc) with **model weights and inference code**. Download links below. Technical report and finetuning code coming soon.
@@ -251,17 +252,16 @@ $ cd examples_infer/punc
 $ bash inference_punc.sh
 ```
 
+### vLLM Usage
+```shell
+# Serving FireRedASR2-LLM with latest vLLM for the highest performance.
+# For more details, see https://github.com/vllm-project/vllm/pull/35727.
+$ vllm serve allendou/FireRedASR2-LLM-vllm -tp=2 --dtype=float32
+$ python3 examples/online_serving/openai_transcription_client.py --repetition_penalty=1.0 --audio_path=/root/hello_zh.wav
+```
 
 ### Python API Usage
 Set up `PYTHONPATH` first: `export PYTHONPATH=$PWD/:$PYTHONPATH`
-
-#### VLLM
-```python
-#Serving FireRedASR2-LLM with latest vLLM for the highest performance.
-#For more details, see https://github.com/vllm-project/vllm/pull/35727.
-vllm serve allendou/FireRedASR2-LLM-vllm -tp=2 --dtype=float32
-python3 examples/online_serving/openai_transcription_client.py --repetition_penalty=1.0 --audio_path=/root/hello_zh.wav
-```
 
 #### ASR
 ```python
