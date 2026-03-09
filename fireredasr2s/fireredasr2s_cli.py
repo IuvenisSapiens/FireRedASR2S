@@ -9,16 +9,17 @@ import logging
 import os
 
 import soundfile as sf
-from textgrid import TextGrid, IntervalTier
+from textgrid import IntervalTier, TextGrid
 
 from fireredasr2s.fireredasr2 import FireRedAsr2Config
+from fireredasr2s.fireredasr2system import (FireRedAsr2System,
+                                            FireRedAsr2SystemConfig)
 from fireredasr2s.fireredlid import FireRedLidConfig
 from fireredasr2s.fireredpunc import FireRedPuncConfig
 from fireredasr2s.fireredvad import FireRedVadConfig
-from fireredasr2s.fireredasr2system import FireRedAsr2System, FireRedAsr2SystemConfig
 
 logging.basicConfig(level=logging.INFO,
-    format="%(asctime)s (%(module)s:%(lineno)d) %(levelname)s: %(message)s")
+                    format="%(asctime)s (%(module)s:%(lineno)d) %(levelname)s: %(message)s")
 logger = logging.getLogger("fireredasr2s.asr_system")
 
 
@@ -86,7 +87,8 @@ punc_g.add_argument('--punc_sentence_max_length', type=int, default=-1)
 
 def main(args):
     wavs = get_wav_info(args)
-    if args.outdir: os.makedirs(args.outdir, exist_ok=True)
+    if args.outdir:
+        os.makedirs(args.outdir, exist_ok=True)
     fout = open(args.outdir + "/result.jsonl", "w") if args.outdir else None
 
     # Build Models
@@ -155,7 +157,8 @@ def main(args):
             save_segment_dir = os.path.join(args.outdir, "vad_segment")
             split_and_save_segment(wav_path, result["vad_segments_ms"], save_segment_dir)
 
-    if fout: fout.close()
+    if fout:
+        fout.close()
     logger.info("All Done")
 
 
@@ -164,7 +167,7 @@ def get_wav_info(args):
     Returns:
         wavs: list of (uttid, wav_path)
     """
-    base = lambda p: os.path.basename(p).replace(".wav", "")
+    def base(p): return os.path.basename(p).replace(".wav", "")
     if args.wav_path:
         wavs = [(base(args.wav_path), args.wav_path)]
     elif args.wav_paths and len(args.wav_paths) >= 1:
@@ -258,10 +261,13 @@ def split_and_save_segment(wav_path, timestamps_ms, save_segment_dir):
         start = int(start_ms / 1000 * sample_rate)
         end = int(end_ms / 1000 * sample_rate)
         sf.write(seg_path, wav_np[start:end], samplerate=sample_rate)
- 
 
 
-if __name__ == "__main__":
+def cli_main():
     args = parser.parse_args()
     logger.info(args)
     main(args)
+
+
+if __name__ == "__main__":
+    cli_main()
