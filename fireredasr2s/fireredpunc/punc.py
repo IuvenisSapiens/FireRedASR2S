@@ -42,6 +42,10 @@ class FireRedPunc:
 
     @torch.no_grad()
     def process(self, batch_text, batch_uttid=None):
+        # 【新增】：拦截空输入，防止 max([]) 报错
+        if not batch_text:
+            return []
+
         # 1. Prepare inputs
         padded_inputs, lengths, txt_tokens = self.model_io.text2tensor(batch_text)
         if self.config.use_gpu:
@@ -69,6 +73,10 @@ class FireRedPunc:
 
     @torch.no_grad()
     def process_with_timestamp(self, batch_timestamp, batch_uttid=None):
+        # 【新增】：拦截空输入，防止 max([]) 报错
+        if not batch_timestamp:
+            return []
+
         # 1. Prepare inputs
         padded_inputs, lengths, batch_txt_tokens, batch_tokens_split_num = \
             self.model_io.timestamp2tensor(batch_timestamp)
@@ -291,6 +299,11 @@ class ModelIO:
                 if start == -1:
                     start = timestamp[1]
                 end = timestamp[2]
+
+                # 【新增】：每次循环前初始化 token 和 tag，防止上一个词的变量污染
+                token = ""
+                tag = self.DEFAULT_OUT
+
                 for k in range(split_num):
                     sub_token = token_seq[i]
                     tag = self.out_dict[pred_seq[i]]
@@ -300,6 +313,12 @@ class ModelIO:
                     else:  # k > 0
                         token += sub_token
                     i += 1
+
+                # 【新增】：如果分词器没有产出任何token (例如输入本来就是空字符串"")
+                # 强行把 token 赋值为原始字符串，保证断言通过且后续逻辑不丢失信息
+                if split_num == 0:
+                    token = timestamp[0]
+
                 assert token == timestamp[0], f"{token}/{timestamp}"
                 j += 1
                 # Add " " before English & Digit
