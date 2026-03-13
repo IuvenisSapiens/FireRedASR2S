@@ -10,3 +10,6 @@ utt2event
 pretrained_models/
 *.swp
 *.swo
+models/
+.vscode/
+outputs/
