@@ -10,11 +10,11 @@ A SOTA Industrial-Grade All-in-One ASR System
 [[Paper]](https://arxiv.org/pdf/2603.10420)
 [[Model🤗]](https://huggingface.co/collections/FireRedTeam/fireredasr2s)
 [[Model🤖]](https://www.modelscope.cn/collections/xukaituo/FireRedASR2S)
-[[Demo]](https://huggingface.co/spaces/FireRedTeam/FireRedASR)
+[[Demo]](https://huggingface.co/spaces/FireRedTeam/FireRedASR2S)
 
 
 FireRedASR2S is a state-of-the-art (SOTA), industrial-grade, all-in-one ASR system with ASR, VAD, LID, and Punc modules. All modules achieve SOTA performance:
-- **FireRedASR2**: Automatic Speech Recognition (ASR) supporting peech and singing transcription for Chinese (Mandarin, 20+ dialects/accents), English, code-switching. 2.89% average CER on 4 public Mandarin benchmarks, 11.55% on 19 Chinese dialects and accents benchmarks, **outperforming Doubao-ASR, Qwen3-ASR-1.7B, Fun-ASR, and Fun-ASR-Nano-2512**. FireRedASR2-AED also supports word-level timestamps and confidence scores.
+- **FireRedASR2**: Automatic Speech Recognition (ASR) supporting speech and singing transcription for Chinese (Mandarin, 20+ dialects/accents), English, code-switching. 2.89% average CER on 4 public Mandarin benchmarks, 11.55% on 19 Chinese dialects and accents benchmarks, **outperforming Doubao-ASR, Qwen3-ASR-1.7B, Fun-ASR, and Fun-ASR-Nano-2512**. FireRedASR2-AED also supports word-level timestamps and confidence scores.
 - **FireRedVAD**: Voice Activity Detection (VAD) supporting speech/singing/music in 100+ languages. 97.57% F1, **outperforming Silero-VAD, TEN-VAD, FunASR-VAD and WebRTC-VAD**. Supports non-streaming/streaming VAD and Multi-label VAD (mVAD).
 - **FireRedLID**: Spoken Language Identification (LID) supporting 100+ languages and 20+ Chinese dialects/accents. 97.18% accuracy, **outperforming Whisper and SpeechBrain**.
 - **FireRedPunc**: Punctuation Prediction (Punc) for Chinese and English. 78.90% average F1, outperforming FunASR-Punc (62.77%).
