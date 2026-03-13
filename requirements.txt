@@ -9,3 +9,4 @@ kaldi_native_fbank==1.15
 sentencepiece==0.1.99
 soundfile==0.12.1
 textgrid
+peft>=0.13.2

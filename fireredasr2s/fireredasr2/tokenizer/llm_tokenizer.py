@@ -66,9 +66,9 @@ class LlmTokenizerWrapper:
                     tokenize=True,
                     chat_template=TEMPLATE,
                     add_generation_prompt=False,
-                    padding="longest",
                     max_length=max_len,
                     truncation=True,
+                    return_dict=False
                 )
             )
 
@@ -76,7 +76,7 @@ class LlmTokenizerWrapper:
         max_len_texts = max([len(text) for text in texts])
         if tokenizer.padding_side == "right":
             texts = [
-                text + [tokenizer.pad_token_id] * (max_len_texts - len(text))
+                list(text) + [tokenizer.pad_token_id] * (max_len_texts - len(text))
                 for text in texts
             ]
         else:
