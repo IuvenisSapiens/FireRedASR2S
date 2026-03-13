@@ -8,7 +8,8 @@ A SOTA Industrial-Grade All-in-One ASR System
 </div>
 
 [[Paper]](https://arxiv.org/pdf/2603.10420)
-[[Model]](https://huggingface.co/FireRedTeam)
+[[Model🤗]](https://huggingface.co/collections/FireRedTeam/fireredasr2s)
+[[Model🤖]](https://www.modelscope.cn/collections/xukaituo/FireRedASR2S)
 [[Demo]](https://huggingface.co/spaces/FireRedTeam/FireRedASR)
 
 

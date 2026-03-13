@@ -73,15 +73,22 @@ class FireRedAsr2System:
             # 3. ASR
             batch_asr_results = self.asr.transcribe(batch_asr_uttid, batch_asr_wav)
             logger.info(f"ASR: {batch_asr_results}")
-            batch_asr_results = [a for a in batch_asr_results if not re.search(r"(<blank>)|(<sil>)", a["text"])]
-            asr_results.extend(batch_asr_results)
 
             if self.config.enable_lid:
                 batch_lid_results = self.lid.process(batch_asr_uttid, batch_asr_wav)
                 logger.info(f"LID: {batch_lid_results}")
             else:
+                # Note: The original batch size is used here to ensure alignment with the initial number of ASR results
                 batch_lid_results = [None] * len(batch_asr_results)
-            lid_results.extend(batch_lid_results)
+
+            # Synchronously traverse and filter to ensure that asr_results and lid_results always maintain a one-to-one correspondence
+            for a_res, l_res in zip(batch_asr_results, batch_lid_results):
+                text = a_res.get("text", "").strip()
+                # Filter out <blank>, <sil> and completely empty strings ""
+                if not text or re.search(r"(<blank>)|(<sil>)", text):
+                    continue
+                asr_results.append(a_res)
+                lid_results.append(l_res)
 
             batch_asr_uttid = []
             batch_asr_wav = []
@@ -95,7 +102,9 @@ class FireRedAsr2System:
             for j, asr_result in enumerate(asr_results):
                 batch_asr_text.append(asr_result["text"])
                 batch_asr_uttid.append(asr_result["uttid"])
-                if "timestamp" in asr_result:
+                if self.config.asr_config.return_timestamp:
+                    batch_asr_timestamp.append(asr_result.get("timestamp", []))
+                elif "timestamp" in asr_result:
                     batch_asr_timestamp.append(asr_result["timestamp"])
                 if len(batch_asr_text) < self.config.punc_batch_size and j != len(asr_results) - 1:
                     continue

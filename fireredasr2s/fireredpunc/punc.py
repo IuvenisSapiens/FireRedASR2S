@@ -42,6 +42,10 @@ class FireRedPunc:
 
     @torch.no_grad()
     def process(self, batch_text, batch_uttid=None):
+        # Intercept empty input to prevent max([]) from throwing an error
+        if not batch_text:
+            return []
+
         # 1. Prepare inputs
         padded_inputs, lengths, txt_tokens = self.model_io.text2tensor(batch_text)
         if self.config.use_gpu:
@@ -69,6 +73,10 @@ class FireRedPunc:
 
     @torch.no_grad()
     def process_with_timestamp(self, batch_timestamp, batch_uttid=None):
+        # Intercept empty input to prevent max([]) from throwing an error
+        if not batch_timestamp:
+            return []
+
         # 1. Prepare inputs
         padded_inputs, lengths, batch_txt_tokens, batch_tokens_split_num = \
             self.model_io.timestamp2tensor(batch_timestamp)
@@ -291,6 +299,11 @@ class ModelIO:
                 if start == -1:
                     start = timestamp[1]
                 end = timestamp[2]
+
+                # Initialize the variables 'token' and 'tag' before each iteration to prevent contamination from the previous word's variables
+                token = ""
+                tag = self.DEFAULT_OUT
+
                 for k in range(split_num):
                     sub_token = token_seq[i]
                     tag = self.out_dict[pred_seq[i]]
@@ -300,6 +313,12 @@ class ModelIO:
                     else:  # k > 0
                         token += sub_token
                     i += 1
+
+                # If the word segmenter fails to produce any tokens (for example, the input is an empty string "")
+                # Forcefully assign the original string to the token to ensure that the assertion passes and the subsequent logic retains all necessary information
+                if split_num == 0:
+                    token = timestamp[0]
+
                 assert token == timestamp[0], f"{token}/{timestamp}"
                 j += 1
                 # Add " " before English & Digit
