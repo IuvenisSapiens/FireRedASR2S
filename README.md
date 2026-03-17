@@ -200,8 +200,8 @@ print(results)
 asr_config = FireRedAsr2Config(
     use_gpu=True,
     decode_min_len=0,
-    repetition_penalty=1.0,
-    llm_length_penalty=0.0,
+    repetition_penalty=3.0,
+    llm_length_penalty=1.0,
     temperature=1.0
 )
 model = FireRedAsr2.from_pretrained("llm", "pretrained_models/FireRedASR2-LLM", asr_config)
