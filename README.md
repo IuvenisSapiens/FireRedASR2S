@@ -200,8 +200,8 @@ print(results)
 asr_config = FireRedAsr2Config(
     use_gpu=True,
     decode_min_len=0,
-    repetition_penalty=1.0,
-    llm_length_penalty=0.0,
+    repetition_penalty=3.0,
+    llm_length_penalty=1.0,
     temperature=1.0
 )
 model = FireRedAsr2.from_pretrained("llm", "pretrained_models/FireRedASR2-LLM", asr_config)
@@ -507,5 +507,12 @@ Thanks to the following open-source works:
   author={Xu, Kaituo and Jia, Yan and Huang, Kai and Chen, Junjie and Li, Wenpeng and Liu, Kun and Xie, Feng-Long and Tang, Xu and Hu, Yao},
   journal={arXiv preprint arXiv:2603.10420},
   year={2026}
+}
+
+@article{xu2025fireredasr,
+  title={FireRedASR: Open-Source Industrial-Grade Mandarin Speech Recognition Models from Encoder-Decoder to LLM Integration},
+  author={Xu, Kai-Tuo and Xie, Feng-Long and Tang, Xu and Hu, Yao},
+  journal={arXiv preprint arXiv:2501.14350},
+  year={2025}
 }
 ```
