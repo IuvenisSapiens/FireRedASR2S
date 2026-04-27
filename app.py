@@ -141,6 +141,8 @@ model_cache = ModelCache()
 def normalize_audio_to_16k_mono(audio_path, output_dir, progress=None):
     """将输入音频规范化为 16kHz mono wav，返回可用于推理的文件路径"""
     import soundfile as sf
+    import torch
+
     audio_info = sf.info(audio_path)
     sample_rate = audio_info.samplerate
     num_channels = audio_info.channels
@@ -151,7 +153,11 @@ def normalize_audio_to_16k_mono(audio_path, output_dir, progress=None):
     if progress:
         progress(0.35, desc="音频重采样到 16kHz mono...")
 
-    waveform, sr = torchaudio.load(audio_path)
+    data, sr = sf.read(audio_path, dtype="float32")
+    if data.ndim == 1:
+        waveform = torch.from_numpy(data).unsqueeze(0)
+    else:
+        waveform = torch.from_numpy(data.T)
 
     if waveform.size(0) > 1:
         waveform = waveform.mean(dim=0, keepdim=True)
@@ -160,13 +166,7 @@ def normalize_audio_to_16k_mono(audio_path, output_dir, progress=None):
         waveform = torchaudio.functional.resample(waveform, sr, 16000)
 
     normalized_path = os.path.join(output_dir, "normalized_16k_mono.wav")
-    torchaudio.save(
-        normalized_path,
-        waveform,
-        16000,
-        encoding="PCM_S",
-        bits_per_sample=16,
-    )
+    sf.write(normalized_path, waveform.squeeze(0).cpu().numpy(), 16000, subtype="PCM_16")
 
     return normalized_path
 
