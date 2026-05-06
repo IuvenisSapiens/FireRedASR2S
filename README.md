@@ -45,6 +45,104 @@ FireRedASR2S is a state-of-the-art (SOTA), industrial-grade, all-in-one ASR syst
 
 
 
+## Evaluation
+### FireRedASR2
+Metrics: Character Error Rate (CER%) for Chinese and Word Error Rate (WER%) for English. Lower is better.
+
+We evaluate FireRedASR2 on 24 public test sets covering Mandarin, 20+ Chinese dialects/accents, and singing.
+
+- **Mandarin (4 test sets)**: 2.89% (LLM) / 3.05% (AED) average CER, outperforming Doubao-ASR (3.69%), Qwen3-ASR-1.7B (3.76%), Fun-ASR (4.16%) and Fun-ASR-Nano-2512 (4.55%).
+- **Dialects (19 test sets)**: 11.55% (LLM) / 11.67% (AED) average CER, outperforming Doubao-ASR (15.39%), Qwen3-ASR-1.7B (11.85%), Fun-ASR (12.76%) and Fun-ASR-Nano-2512 (15.07%).
+
+*Note: FRASR2=FireRedASR2, ws=WenetSpeech, md=MagicData, conv=Conversational, daily=Daily-use.*
+
+|ID|Testset\CER\Model|FRASR2-LLM|FRASR2-AED|Doubao-ASR|Qwen3-ASR|Fun-ASR|
+|:--:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+|Avg|**All(1-24)**   |**9.67** |**9.80** |12.98 |10.12 |10.92 |
+|Avg|**Mandarin(1-4)**   |**2.89** |**3.05** |3.69 |3.76 |4.16 |
+|Avg|**Dialect(5-23)**  |**11.55**|**11.67**|15.39|11.85|12.76|
+|1 |aishell1          |0.64 |0.57 |1.52 |1.48 |1.64 |
+|2 |aishell2          |2.15 |2.51 |2.77 |2.71 |2.38 |
+|3 |ws-net            |4.44 |4.57 |5.73 |4.97 |6.85 |
+|4 |ws-meeting        |4.32 |4.53 |4.74 |5.88 |5.78 |
+|5 |kespeech          |3.08 |3.60 |5.38 |5.10 |5.36 |
+|6 |ws-yue-short      |5.14 |5.15 |10.51|5.82 |7.34 |
+|7 |ws-yue-long       |8.71 |8.54 |11.39|8.85 |10.14|
+|8 |ws-chuan-easy     |10.90|10.60|11.33|11.99|12.46|
+|9 |ws-chuan-hard     |20.71|21.35|20.77|21.63|22.49|
+|10|md-heavy          |7.42 |7.43 |7.69 |8.02 |9.13 |
+|11|md-yue-conv       |12.23|11.66|26.25|9.76 |33.71|
+|12|md-yue-daily      |3.61 |3.35 |12.82|3.66 |2.69 |
+|13|md-yue-vehicle    |4.50 |4.83 |8.66 |4.28 |6.00 |
+|14|md-chuan-conv     |13.18|13.07|11.77|14.35|14.01|
+|15|md-chuan-daily    |4.90 |5.17 |3.90 |4.93 |3.98 |
+|16|md-shanghai-conv  |28.70|27.02|45.15|29.77|25.49|
+|17|md-shanghai-daily |24.94|24.18|44.06|23.93|12.55|
+|18|md-wu             |7.15 |7.14 |7.70 |7.57 |10.63|
+|19|md-zhengzhou-conv |10.20|10.65|9.83 |9.55 |10.85|
+|20|md-zhengzhou-daily|5.80 |6.26 |5.77 |5.88 |6.29 |
+|21|md-wuhan          |9.60 |10.81|9.94 |10.22|4.34 |
+|22|md-tianjin        |15.45|15.30|15.79|16.16|19.27|
+|23|md-changsha       |23.18|25.64|23.76|23.70|25.66|
+|24|opencpop          |1.12 |1.17 |4.36 |2.57 |3.05 |
+
+
+### FireRedVAD
+<details>
+<summary>Click to expand</summary>
+We evaluate FireRedVAD on FLEURS-VAD-102, a multilingual VAD benchmark covering 102 languages.
+
+FireRedVAD achieves SOTA performance, outperforming Silero-VAD, TEN-VAD, FunASR-VAD, and WebRTC-VAD.
+
+|Metric\Model|FireRedVAD|Silero-VAD|TEN-VAD|FunASR-VAD|WebRTC-VAD|
+|:-------:|:-----:|:------:|:------:|:------:|:------:|
+|AUC-ROC↑  |**99.60**|97.99|97.81|-    |-    |
+|F1 score↑ |**97.57**|95.95|95.19|90.91|52.30|
+|False Alarm Rate↓  |**2.69** |9.41 |15.47|44.03|2.83 |
+|Miss Rate↓|3.62     |3.95 |2.95 |0.42 |64.15|
+
+FLEURS-VAD-102: We randomly selected ~100 audio files per language from [FLEURS test set](https://huggingface.co/datasets/google/fleurs), resulting in 9,443 audio files with manually annotated binary VAD labels (speech=1, silence=0). This VAD testset will be open sourced (coming soon).
+
+Note: FunASR-VAD achieves low Miss Rate but at the cost of high False Alarm Rate (44.03%), indicating over-prediction of speech segments.
+</details>
+
+
+### FireRedLID
+<details>
+<summary>Click to expand</summary>
+Metric: Utterance-level LID Accuracy (%). Higher is better.
+
+We evaluate FireRedLID on multilingual and Chinese dialect benchmarks.
+
+FireRedLID achieves SOTA performance, outperforming Whisper, SpeechBrain-LID, and Dolphin.
+
+|Testset\Model|Languages|FireRedLID|Whisper|SpeechBrain|Dolphin|
+|:-----------------:|:---------:|:---------:|:-----:|:---------:|:-----:|
+|FLEURS test         |82 languages |**97.18**     |79.41  |92.91      |-|
+|CommonVoice test    |74 languages |**92.07**    |80.81  |78.75      |-|
+|KeSpeech + MagicData|20+ Chinese dialects/accents |**88.47**     |-|-|69.01|
+</details>
+
+
+### FireRedPunc
+<details>
+<summary>Click to expand</summary>
+Metric: Precision/Recall/F1 Score (%). Higher is better.
+
+We evaluate FireRedPunc on multi-domain Chinese and English benchmarks.
+
+FireRedPunc achieves SOTA performance, outperforming FunASR-Punc (CT-Transformer).
+
+|Testset\Model|#Sentences|FireRedPunc|FunASR-Punc|
+|:------------------:|:---------:|:--------------:|:-----------------:|
+|Multi-domain Chinese| 88,644    |**82.84 / 83.08 / 82.96** | 77.27 / 74.03 / 75.62 |
+|Multi-domain English| 28,641    |**78.40 / 71.57 / 74.83** | 55.79 / 45.15 / 49.91 |
+|Average F1 Score    | -         |**78.90** | 62.77 |
+
+</details>
+
+
+
 ## Method
 ### FireRedASR2S: System Overview
 ![Model](./assets/FireRedASR2S.png)
@@ -394,103 +492,6 @@ for wav_path, uttid in zip(batch_wav_path, batch_uttid):
 - **FireRedASR2-LLM** supports audio input **up to 40s**. The behavior for longer input is untested.
 - **FireRedASR2-LLM Batch Beam Search**: When performing batch beam search with FireRedASR2-LLM, even though attention masks are applied, it is recommended to ensure that the input lengths of the utterances are similar. If there are significant differences in utterance lengths, shorter utterances may experience **repetition issues**. You can either sort your dataset by length or set `batch_size` to 1 to avoid the repetition issue.
 
-
-
-## Evaluation
-### FireRedASR2
-Metrics: Character Error Rate (CER%) for Chinese and Word Error Rate (WER%) for English. Lower is better.
-
-We evaluate FireRedASR2 on 24 public test sets covering Mandarin, 20+ Chinese dialects/accents, and singing.
-
-- **Mandarin (4 test sets)**: 2.89% (LLM) / 3.05% (AED) average CER, outperforming Doubao-ASR (3.69%), Qwen3-ASR-1.7B (3.76%), Fun-ASR (4.16%) and Fun-ASR-Nano-2512 (4.55%).
-- **Dialects (19 test sets)**: 11.55% (LLM) / 11.67% (AED) average CER, outperforming Doubao-ASR (15.39%), Qwen3-ASR-1.7B (11.85%), Fun-ASR (12.76%) and Fun-ASR-Nano-2512 (15.07%).
-
-*Note: FRASR2=FireRedASR2, ws=WenetSpeech, md=MagicData, conv=Conversational, daily=Daily-use.*
-
-|ID|Testset\CER\Model|FRASR2-LLM|FRASR2-AED|Doubao-ASR|Qwen3-ASR|Fun-ASR|
-|:--:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-|Avg|**All(1-24)**   |**9.67** |**9.80** |12.98 |10.12 |10.92 |
-|Avg|**Mandarin(1-4)**   |**2.89** |**3.05** |3.69 |3.76 |4.16 |
-|Avg|**Dialect(5-23)**  |**11.55**|**11.67**|15.39|11.85|12.76|
-|1 |aishell1          |0.64 |0.57 |1.52 |1.48 |1.64 |
-|2 |aishell2          |2.15 |2.51 |2.77 |2.71 |2.38 |
-|3 |ws-net            |4.44 |4.57 |5.73 |4.97 |6.85 |
-|4 |ws-meeting        |4.32 |4.53 |4.74 |5.88 |5.78 |
-|5 |kespeech          |3.08 |3.60 |5.38 |5.10 |5.36 |
-|6 |ws-yue-short      |5.14 |5.15 |10.51|5.82 |7.34 |
-|7 |ws-yue-long       |8.71 |8.54 |11.39|8.85 |10.14|
-|8 |ws-chuan-easy     |10.90|10.60|11.33|11.99|12.46|
-|9 |ws-chuan-hard     |20.71|21.35|20.77|21.63|22.49|
-|10|md-heavy          |7.42 |7.43 |7.69 |8.02 |9.13 |
-|11|md-yue-conv       |12.23|11.66|26.25|9.76 |33.71|
-|12|md-yue-daily      |3.61 |3.35 |12.82|3.66 |2.69 |
-|13|md-yue-vehicle    |4.50 |4.83 |8.66 |4.28 |6.00 |
-|14|md-chuan-conv     |13.18|13.07|11.77|14.35|14.01|
-|15|md-chuan-daily    |4.90 |5.17 |3.90 |4.93 |3.98 |
-|16|md-shanghai-conv  |28.70|27.02|45.15|29.77|25.49|
-|17|md-shanghai-daily |24.94|24.18|44.06|23.93|12.55|
-|18|md-wu             |7.15 |7.14 |7.70 |7.57 |10.63|
-|19|md-zhengzhou-conv |10.20|10.65|9.83 |9.55 |10.85|
-|20|md-zhengzhou-daily|5.80 |6.26 |5.77 |5.88 |6.29 |
-|21|md-wuhan          |9.60 |10.81|9.94 |10.22|4.34 |
-|22|md-tianjin        |15.45|15.30|15.79|16.16|19.27|
-|23|md-changsha       |23.18|25.64|23.76|23.70|25.66|
-|24|opencpop          |1.12 |1.17 |4.36 |2.57 |3.05 |
-
-
-### FireRedVAD
-<details>
-<summary>Click to expand</summary>
-We evaluate FireRedVAD on FLEURS-VAD-102, a multilingual VAD benchmark covering 102 languages.
-
-FireRedVAD achieves SOTA performance, outperforming Silero-VAD, TEN-VAD, FunASR-VAD, and WebRTC-VAD.
-
-|Metric\Model|FireRedVAD|Silero-VAD|TEN-VAD|FunASR-VAD|WebRTC-VAD|
-|:-------:|:-----:|:------:|:------:|:------:|:------:|
-|AUC-ROC↑  |**99.60**|97.99|97.81|-    |-    |
-|F1 score↑ |**97.57**|95.95|95.19|90.91|52.30|
-|False Alarm Rate↓  |**2.69** |9.41 |15.47|44.03|2.83 |
-|Miss Rate↓|3.62     |3.95 |2.95 |0.42 |64.15|
-
-FLEURS-VAD-102: We randomly selected ~100 audio files per language from [FLEURS test set](https://huggingface.co/datasets/google/fleurs), resulting in 9,443 audio files with manually annotated binary VAD labels (speech=1, silence=0). This VAD testset will be open sourced (coming soon).
-
-Note: FunASR-VAD achieves low Miss Rate but at the cost of high False Alarm Rate (44.03%), indicating over-prediction of speech segments.
-</details>
-
-
-### FireRedLID
-<details>
-<summary>Click to expand</summary>
-Metric: Utterance-level LID Accuracy (%). Higher is better.
-
-We evaluate FireRedLID on multilingual and Chinese dialect benchmarks.
-
-FireRedLID achieves SOTA performance, outperforming Whisper, SpeechBrain-LID, and Dolphin.
-
-|Testset\Model|Languages|FireRedLID|Whisper|SpeechBrain|Dolphin|
-|:-----------------:|:---------:|:---------:|:-----:|:---------:|:-----:|
-|FLEURS test         |82 languages |**97.18**     |79.41  |92.91      |-|
-|CommonVoice test    |74 languages |**92.07**    |80.81  |78.75      |-|
-|KeSpeech + MagicData|20+ Chinese dialects/accents |**88.47**     |-|-|69.01|
-</details>
-
-
-### FireRedPunc
-<details>
-<summary>Click to expand</summary>
-Metric: Precision/Recall/F1 Score (%). Higher is better.
-
-We evaluate FireRedPunc on multi-domain Chinese and English benchmarks.
-
-FireRedPunc achieves SOTA performance, outperforming FunASR-Punc (CT-Transformer).
-
-|Testset\Model|#Sentences|FireRedPunc|FunASR-Punc|
-|:------------------:|:---------:|:--------------:|:-----------------:|
-|Multi-domain Chinese| 88,644    |**82.84 / 83.08 / 82.96** | 77.27 / 74.03 / 75.62 |
-|Multi-domain English| 28,641    |**78.40 / 71.57 / 74.83** | 55.79 / 45.15 / 49.91 |
-|Average F1 Score    | -         |**78.90** | 62.77 |
-
-</details>
 
 
 ## Acknowledgements

@@ -195,7 +195,7 @@ class FireRedAsr2:
             starts, ends = hyp["timestamp"]
             timestamp = []
             last_end = dur
-            SHIFT = 0.06  # shift 40ms
+            SHIFT = 0.06  # shift 60ms
             for hyp_id, start, end in zip(hyp_ids, starts, ends):
                 token = self.tokenizer.detokenize([hyp_id], "", False)
                 start = min(max(0, start - SHIFT), last_end)
