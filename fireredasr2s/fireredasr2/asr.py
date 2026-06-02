@@ -82,7 +82,10 @@ class FireRedAsr2:
         logger.info(self.config)
         if self.config.use_gpu:
             if self.config.use_half:
-                self.model.half()
+                if torch.cuda.is_bf16_supported():
+                    self.model.bfloat16()
+                else:
+                    self.model.half()
             self.model.cuda()
             if self.elm:
                 self.elm.cuda()
@@ -104,7 +107,10 @@ class FireRedAsr2:
         if self.config.use_gpu:
             feats, lengths = feats.cuda(), lengths.cuda()
             if self.config.use_half:
-                feats = feats.half()
+                if torch.cuda.is_bf16_supported():
+                    feats = feats.bfloat16()
+                else:
+                    feats = feats.half()
 
         if self.asr_type == "aed":
             start_time = time.time()
